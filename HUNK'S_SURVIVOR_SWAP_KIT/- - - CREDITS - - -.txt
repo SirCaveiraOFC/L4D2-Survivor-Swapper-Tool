@@ -1,0 +1,3 @@
+- - - zeqmacaw - - - : Making the original Survivor Swap Files: https://sites.google.com/view/zeqmacawstidbits/tutorials/modding-a-left-4-dead-2-survivor/modding-the-animations/modding-the-body-animations/modding-the-body-animations-by-swapping-with-another-survivors-animations
+
+- - - H.U.N.K - - - : Making a simple survivor swap kit.

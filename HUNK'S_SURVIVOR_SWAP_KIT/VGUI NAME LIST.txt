@@ -1,0 +1,69 @@
+*DELETE THE .VMT FILES THEY WONT BE USEFUL FOR THIS*
+
+L4D1 VGUI NAMES: *NO L4D1 AND L4D2 DOES NOT USE THE SAME NAMES*
+
+BILL:
+
+Lobby Icon: select_bill
+
+In-game Icon: s_panel_namvet
+
+Incap Icon: s_panel_namvet_incap
+
+ZOEY:
+
+Lobby Icon: select_zoey
+
+In-game Icon: s_panel_teenangst
+
+Incap Icon: s_panel_teenangst_incap
+
+LOUIS:
+
+Lobby Icon: select_louis
+
+In-game Icon: s_panel_manager
+
+Incap Icon: s_panel_manager_incap
+
+FRANCIS:
+
+Lobby Icon: select_francis
+
+In-game Icon: s_panel_biker
+
+Incap Icon: s_panel_biker_incap
+
+L4D2 VGUI NAMES:
+
+NICK:
+
+Lobby Icon: s_panel_lobby_gambler
+
+In-game Icon: s_panel_gambler
+
+Incap Icon: s_panel_gambler_incap
+
+ROCHELLE:
+
+Lobby Icon: s_panel_lobby_producer
+
+In-game Icon: s_panel_producer
+
+Incap Icon: s_panel_producer_incap
+
+COACH:
+
+Lobby Icon: s_panel_lobby_coach
+
+In-game Icon: s_panel_coach
+
+Incap Icon: s_panel_coach_incap
+
+ELLIS:
+
+Lobby Icon: s_panel_lobby_mechanic
+
+In-game Icon: s_panel_mechanic
+
+Incap Icon: s_panel_mechanic_incap

@@ -1,0 +1,45 @@
+L4D1 ANIM CODE LIST: *YES LOUIS AND FRANCIS USES THE SAME ANIMATIONS*
+
+*DO NOT REPLACE THE ENTIRE ANIMATIONS JUST ADD ON TOP OF THE ORIGINAL ANIMATIONS*
+
+BILL:
+
+$includemodel "survivors/anim_namvet.mdl"
+$includemodel "survivors/gestures_namvet.mdl"
+
+ZOEY:
+
+$includemodel "survivors/anim_teenangst.mdl"
+$includemodel "survivors/gestures_TeenAngst.mdl"
+
+LOUIS:
+
+$includemodel "survivors/anim_Biker.mdl"
+$includemodel "survivors/gestures_biker.mdl"
+
+FRANCIS:
+
+$includemodel "survivors/anim_Biker.mdl"
+$includemodel "survivors/gestures_biker.mdl"
+
+L4D2 ANIM CODE LIST:
+
+NICK:
+
+$includemodel "survivors/anim_gambler.mdl"
+$includemodel "survivors/anim_gestures.mdl"
+
+ROCHELLE:
+
+$includemodel "survivors/anim_producer.mdl"
+$includemodel "survivors/anim_gestures.mdl"
+
+COACH:
+
+$includemodel "survivors/anim_coach.mdl"
+$includemodel "survivors/anim_gestures.mdl"
+
+ELLIS:
+
+$includemodel "survivors/anim_mechanic.mdl"
+$includemodel "survivors/anim_gestures.mdl"
