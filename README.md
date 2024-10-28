@@ -31,7 +31,7 @@ This tool is especially beneficial for modders and players who want to personali
 - **Follow naming conventions:** Always name survivor folders in lowercase. For example, if converting an Ellis skin to Louis, name the skin folder as "ellis". Other valid names include `coach`, `francis`, `zoey`, etc.
 
 ### Steps to Use:
-1. Place the folder of the survivor skin you wish to convert in the directory.
+1. Place the folder of the survivor skin you wish to convert in the "Survivor_Swap" directory.
 2. Setup the `settings.json` file where you can configure:
    - `close_crowbar_when_swap`: Whether to close Crowbar after conversion (true|false).
    - `delete_folders_after_swap`: Whether to delete folders after conversion (true|false).
