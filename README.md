@@ -21,7 +21,7 @@ This tool is especially beneficial for modders and players who want to personali
 ## How to Use
 
 ### Prerequisites:
-- Ensure the "Left 4 Dead 2 Authoring Tools" is installed;
+- Ensure the `Left 4 Dead 2 Authoring Tools` is installed;
 - Ensure Python is installed on your system (or use the .exe version instead);
 - Install the requirements.txt (or use the .exe version instead);
 - Specify the path to the VPK executable in a file called `settings.json`.
@@ -31,7 +31,7 @@ This tool is especially beneficial for modders and players who want to personali
 - **Follow naming conventions:** Always name survivor folders in lowercase. For example, if converting an Ellis skin to Louis, name the skin folder as "ellis". Other valid names include `coach`, `francis`, `zoey`, etc.
 
 ### Steps to Use:
-1. Place the folder of the survivor skin you wish to convert in the "Survivor_Swap" directory.
+1. Place the folder of the survivor skin you wish to convert in the `Survivor_Swap` directory.
 2. Setup the `settings.json` file where you can configure:
    - `close_crowbar_when_swap`: Whether to close Crowbar after conversion (true|false).
    - `delete_folders_after_swap`: Whether to delete folders after conversion (true|false).
