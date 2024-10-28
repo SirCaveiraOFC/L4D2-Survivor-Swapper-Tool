@@ -38,7 +38,7 @@ This tool is especially beneficial for modders and players who want to personali
    - `vpk_executable`: The path to the VPK executable (exe path).
 3. Run the script `l4d2_survivor_swapper.py` or `l4d2_survivor_swapper.exe`.
 4. **Origin Survivor:** Choose the survivor whose skin you are converting **from**.
-5. **Destination Survivor:** Enter the survivor whose skin you are converting **to**.
+5. **Destination Survivor:** Choose the survivor whose skin you are converting **to**.
 6. **Final folder name input:** Name the output file. For example, after converting an Ellis skin with CJ's theme to Zoey, you could name it "CJ (Zoey)" or any valid file name.
 7. **AddonInfo Configuration:** Configure `addoninfo.txt` by the input command, providing at least a name. Other fields are optional; to skip, just press enter with empty `` input.
    
