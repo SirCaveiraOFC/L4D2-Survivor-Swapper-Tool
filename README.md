@@ -8,6 +8,16 @@ Developed by: **Sr.Caveira | 頭蓋骨 </> Dark'**
 Email: srcaveiraoficial@gmail.com  
 Development date: 2024/10
 
+## Contributors
+
+- H.U.N.K: Survivor Swap Kit Creator Simplified - His kit version is being used in that Tool;
+- ZeqMacaw: Crowbar and original Survivor Swap Kit Creator;
+- IJARika: Crowbar;
+- IBRS-4Ever: Crowbar;
+- JoelTroch: Crowbar;
+- pundang: Crowbar;
+- TeamSpen210: Crowbar.
+
 ## Description
 
 ### What the Tool Does
