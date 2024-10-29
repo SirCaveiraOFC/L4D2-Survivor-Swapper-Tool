@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from pathlib import Path
-from crowbar import (
+from modules.crowbar import (
 	__crowbar_version__,
 	is_crowbar_running,
 	Crowbar,
@@ -9,7 +9,7 @@ from crowbar import (
 	run_crowbar,
 	check_image_on_screen
 )
-from qc_file_handler import QCFileHandler  # Import the QCFileHandler
+from modules.qc_file_handler import QCFileHandler  # Import the QCFileHandler
 
 import os
 import subprocess
