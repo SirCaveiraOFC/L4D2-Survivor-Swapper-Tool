@@ -10,7 +10,7 @@ class AppMetadataInfo:
     name: str = "L4D2 Survivor Swapper Tool"
     major: int = 2
     minor: int = 0
-    patch: int = 0
+    patch: int = 1
     developer: str = "Sr.Caveira"
     license_name: str = "MIT"
     github_repo: str = "SirCaveiraOFC/L4D2-Survivor-Swapper-Tool"

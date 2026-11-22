@@ -426,6 +426,11 @@ class UpdatesPage(ScrollArea):
             f"TextBrowser {{ background-color: {canvas_bg}; color: {text_fg}; "
             f"border: 1px solid {border_fg}; border-radius: 6px; padding: 8px; }}"
         )
+        L4d2ThemeManager.style_rich_text_browser(
+            self.notes_browser,
+            is_dark,
+            style_markdown_runs=bool(self._last_check and self._last_check.release_notes.strip()),
+        )
         self.protect_banner.setStyleSheet(
             f"QFrame#updProtectBanner {{ background-color: {ok_bg}; border: 1px solid {ok_border}; "
             f"border-radius: 6px; }}"
@@ -814,6 +819,11 @@ class UpdatesPage(ScrollArea):
         if check is not None and check.release_notes.strip():
             header = f"### {check.release_title}\n\n" if check.release_title else ""
             self.notes_browser.setMarkdown(f"{header}{check.release_notes}")
+            L4d2ThemeManager.style_rich_text_browser(
+                self.notes_browser,
+                isDarkTheme(),
+                style_markdown_runs=True,
+            )
         else:
             self.notes_browser.setPlainText(self._i18n.tr("upd_notes_empty"))
 

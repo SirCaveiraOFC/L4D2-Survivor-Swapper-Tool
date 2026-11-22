@@ -15,7 +15,18 @@ from PySide6.QtCore import (
     QVariantAnimation,
     Qt,
 )
-from PySide6.QtGui import QColor, QGuiApplication, QIcon, QIconEngine, QPainter, QPainterPath, QPixmap
+from PySide6.QtGui import (
+    QColor,
+    QGuiApplication,
+    QIcon,
+    QIconEngine,
+    QPainter,
+    QPainterPath,
+    QPalette,
+    QPixmap,
+    QTextCharFormat,
+    QTextCursor,
+)
 from PySide6.QtWidgets import QAbstractButton, QAbstractScrollArea, QWidget
 from qfluentwidgets import (
     CardWidget,
@@ -1335,3 +1346,57 @@ class L4d2ThemeManager:
         """Register workflow step pill objectName and apply theme-matched styling."""
         label.setObjectName("heroStepPill")
         L4d2ThemeManager.apply_label_colors(label.parentWidget() or label)
+
+    @staticmethod
+    def style_rich_text_browser(
+        browser: QWidget,
+        is_dark: bool,
+        style_markdown_runs: bool = False,
+    ) -> None:
+        """Apply readable theme-aware link palette colors and optional markdown anchor/code styling."""
+        link_fg = QColor("#66C0F4" if is_dark else "#0B66C3")
+        code_bg = QColor("#252B37" if is_dark else "#DDD6C7")
+        code_fg = QColor("#EAEFF5" if is_dark else "#181C22")
+        pal = browser.palette()
+        pal.setColor(QPalette.ColorRole.Link, link_fg)
+        pal.setColor(QPalette.ColorRole.LinkVisited, link_fg)
+        browser.setPalette(pal)
+
+        doc = browser.document() if hasattr(browser, "document") else None
+        if doc is None:
+            return
+        doc.setDefaultStyleSheet(
+            f"a, a:link, a:visited {{ color: {link_fg.name()}; text-decoration: underline; }} "
+            f"code, pre {{ background-color: {code_bg.name()}; color: {code_fg.name()}; }}"
+        )
+        if not style_markdown_runs:
+            return
+
+        block = doc.begin()
+        cursor = QTextCursor(doc)
+        while block.isValid():
+            it = block.begin()
+            while not it.atEnd():
+                frag = it.fragment()
+                if frag.isValid():
+                    fmt = frag.charFormat()
+                    is_anchor = fmt.isAnchor()
+                    is_code = fmt.fontFixedPitch()
+                    if is_anchor or is_code:
+                        cursor.setPosition(frag.position())
+                        cursor.setPosition(
+                            frag.position() + frag.length(),
+                            QTextCursor.MoveMode.KeepAnchor,
+                        )
+                        mod = QTextCharFormat()
+                        if is_code:
+                            mod.setBackground(code_bg)
+                            if not is_anchor:
+                                mod.setForeground(code_fg)
+                        if is_anchor:
+                            mod.setForeground(link_fg)
+                            mod.setUnderlineColor(link_fg)
+                            mod.setFontUnderline(True)
+                        cursor.mergeCharFormat(mod)
+                it += 1
+            block = block.next()

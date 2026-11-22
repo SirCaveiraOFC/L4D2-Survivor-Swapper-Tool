@@ -118,6 +118,7 @@ class WorkshopDescriptionDialog(MessageBoxBase):
             f"TextBrowser {{ background-color: {canvas_bg}; border: 1px solid {border_fg}; "
             f"border-radius: 8px; }}"
         )
+        L4d2ThemeManager.style_rich_text_browser(self.browser, is_dark, style_markdown_runs=False)
         self.browser.setHtml(self._rendered_html)
         self.viewLayout.addWidget(self.browser, 1)
 

@@ -372,7 +372,7 @@ def test_updates_page_and_main_window_ui(tmp_path: Path, monkeypatch) -> None:
             source_kind="release",
             release_tag="v2.1.0",
             release_title="v2.1.0",
-            release_notes="- Improved updater",
+            release_notes="- Improved updater\n\n> Archived in [`legacy-v1`](https://github.com/SirCaveiraOFC/L4D2-Survivor-Swapper-Tool/tree/legacy-v1)",
             preview_changes=[
                 UpdateFileChange("core/new_file.py", "added", 120),
                 UpdateFileChange("app.py", "modified", 950),
@@ -385,6 +385,16 @@ def test_updates_page_and_main_window_ui(tmp_path: Path, monkeypatch) -> None:
         assert win._updates_badge.isVisible() is True
         assert win.updates_page.update_btn.isEnabled() is True
         assert win.updates_page.files_table.rowCount() == 3
+        notes_html_dark = win.updates_page.notes_browser.toHtml().lower()
+        assert "#66c0f4" in notes_html_dark
+        assert "#0000ff" not in notes_html_dark
+        assert "#551a8b" not in notes_html_dark
+
+        win.apply_theme_preference("Light")
+        notes_html_light = win.updates_page.notes_browser.toHtml().lower()
+        assert "#0b66c3" in notes_html_light
+        assert "#0000ff" not in notes_html_light
+        win.apply_theme_preference("Dark")
 
         up_to_date = UpdateCheckResult(
             repo="SrCaveira/Swapper",

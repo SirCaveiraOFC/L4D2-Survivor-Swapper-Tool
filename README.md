@@ -1,4 +1,4 @@
-# L4D2 Survivor Swapper Tool | v2.0.0
+# L4D2 Survivor Swapper Tool | v2.0.1
 
 > 🌐 **Language:** **English** | [Português (Brasil)](docs/README.pt-BR.md) | [Español](docs/README.es-ES.md)
 
