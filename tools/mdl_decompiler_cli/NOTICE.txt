@@ -1,0 +1,11 @@
+MdlDecompilerCli.exe
+====================
+
+Headless Source Engine MDL Decompiler CLI built for L4D2 Survivor Swapper Tool.
+
+Attribution:
+- Based on Crowbar 0.74 source code by ZeqMacaw (https://github.com/ZeqMacaw/Crowbar),
+  licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License
+  (https://creativecommons.org/licenses/by-sa/3.0/).
+- Modified with a headless CLI entry point (`CliMain.vb`) and build script (`build.ps1`)
+  so decompilation runs programmatically without a GUI or %APPDATA% settings dependency.

@@ -1,0 +1,44 @@
+# Python bytecode & test caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# User-local runtime config, history, backups & generated logs
+settings.json
+conversion_history.json
+.update_manifest.json
+*.bak
+*.log
+*.tmp
+
+# Local user mods, conversion outputs & archived v1 legacy files
+Survivor_Swap/
+Swapped_Survivors/
+Workshop_Downloads/
+legacy/
+
+# Temporary decompile/compile staging folders
+_l4d2sw_*/
+l4d2sw_pv_*/
+
+# .NET build intermediates if rebuilding tools/mdl_decompiler_cli from source
+tools/**/bin/
+tools/**/obj/
+
+# Editor / IDE & Windows OS metadata
+.vscode/
+.idea/
+*.suo
+*.user
+Thumbs.db
+desktop.ini
+.DS_Store
