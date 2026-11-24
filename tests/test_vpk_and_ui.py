@@ -1816,8 +1816,11 @@ def test_origin_sanitization_mismatch_alerts_light_models_and_workshop_thumb(tmp
         win.swap_page.dest_picker._buttons[d].setChecked(True)
     seven_preview = win.swap_page.tags_preview_label.text()
     assert "Preview (7 files):" in seven_preview
-    assert "+3 more" in seven_preview
-    assert "Ellis:" in win.swap_page.tags_preview_label.toolTip()
+    assert "more" not in seven_preview
+    for expected_name in ("Bill:", "Zoey:", "Louis:", "Francis:", "Rochelle:", "Coach:", "Ellis:"):
+        assert expected_name in seven_preview
+    assert win.swap_page.tags_preview_card.rows_lay.count() == 7
+    assert win.swap_page.tags_preview_card.more_label.isVisible() is False
 
     win.swap_page.progress_card.update_progress(50, "Halfway")
     win.swap_page.clear_swap_btn.click()
@@ -2030,11 +2033,16 @@ def test_batch_locked_dest_states_and_global_item_previews(
             assert btn.isChecked() is False
 
     assert "Preview (5 files):" in page.global_preview_label.text()
-    assert "+1 more" in page.global_preview_label.text()
-    assert "Ellis:" in page.global_preview_label.toolTip()
+    assert "more" not in page.global_preview_label.text()
     assert "Preview (5 files):" in page.item_preview_label.text()
-    assert "+1 more" in page.item_preview_label.text()
-    assert "Ellis:" in page.item_preview_label.toolTip()
+    assert "more" not in page.item_preview_label.text()
+    for expected_name in ("Bill:", "Zoey:", "Louis:", "Francis:", "Ellis:"):
+        assert expected_name in page.global_preview_label.text()
+        assert expected_name in page.item_preview_label.text()
+    assert page.global_preview_card.rows_lay.count() == 5
+    assert page.global_preview_card.more_label.isVisible() is False
+    assert page.item_preview_card.rows_lay.count() == 5
+    assert page.item_preview_card.more_label.isVisible() is False
 
     page.use_global_dests_chk.setChecked(False)
     app.processEvents()

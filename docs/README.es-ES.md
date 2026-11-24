@@ -1,6 +1,6 @@
-# L4D2 Survivor Swapper Tool | v2.0.1
+# L4D2 Survivor Swapper Tool | v2.1.0
 
-> 🌐 **Idioma:** [English](../README.md) | [Português (Brasil)](README.pt-BR.md) | **Español**
+> 🌐 **Idioma:** [English](../README.md) | [Português (Brasil)](README.pt-BR.md) | **Español**  ·  📋 [Changelog](../CHANGELOG.md)
 
 Herramienta automatizada e interfaz de escritorio Fluent UI para portar mods `.vpk` de supervivientes de **Left 4 Dead 2** entre cualquiera de los 8 personajes (`Bill`, `Zoey`, `Louis`, `Francis`, `Nick`, `Rochelle`, `Coach` y `Ellis`), con cola por lotes, descargas de Steam Workshop y actualizador integrado por GitHub.
 
@@ -32,25 +32,23 @@ Herramienta automatizada e interfaz de escritorio Fluent UI para portar mods `.v
 
 ## Requisitos
 
-- **Windows 10 / 11**
-- **Python 3.10+** (se recomienda `3.13`) — marca **"Add Python to PATH"** al instalar
+- **Windows 10 / 11** (`x64`)
 - **Left 4 Dead 2** instalado mediante Steam (`AppID 550`)
 - **Left 4 Dead 2 Authoring Tools** instalado desde Biblioteca de Steam → Herramientas (`AppID 563`, incluye `studiomdl.exe` y `vpk.exe`)
-
-Dependencias de Python ([`requirements.txt`](../requirements.txt)): `PySide6>=6.9.0`, `PySide6-Fluent-Widgets>=1.11.0`, `vpk>=1.4.0`, `vdf>=3.4`, `psutil>=5.9.0`.
+- **Python 3.10+** (se recomienda `3.13`) — **no es necesario** en la edición Portátil `.exe`; solo hace falta al ejecutar desde el código fuente ([`requirements.txt`](../requirements.txt): `PySide6>=6.9.0`, `PySide6-Fluent-Widgets>=1.11.0`, `vpk>=1.4.0`, `vdf>=3.4`, `psutil>=5.9.0`)
 
 ---
 
 ## Instalación
 
-### Opción A — Instalación Fácil en Windows (Recomendado)
+### Opción A — Edición Portátil `.exe` (Recomendado, Sin Python)
 
-1. Descarga o extrae la carpeta en cualquier ubicación de tu PC (ej. `C:\L4D2-Survivor-Swapper-Tool\`).
-2. Asegúrate de tener **Left 4 Dead 2** y **Left 4 Dead 2 Authoring Tools** instalados en Steam.
-3. Haz doble clic en [`_INSTALL_REQUIREMENTS.bat`](../_INSTALL_REQUIREMENTS.bat) para instalar automáticamente todos los paquetes Python.
-4. Haz doble clic en [`_RUN.bat`](../_RUN.bat) para iniciar la aplicación (se ejecuta en segundo plano con `pythonw`).
+1. Descarga el `.zip` Portátil desde Releases (o créalo desde el código fuente con [`tools/build_portable.ps1`](../tools/build_portable.ps1)).
+2. Extrae la carpeta en cualquier ubicación de tu PC (ej. `C:\L4D2-Survivor-Swapper-Tool\`).
+3. Asegúrate de tener **Left 4 Dead 2** y **Left 4 Dead 2 Authoring Tools** instalados en Steam.
+4. Haz doble clic en `L4D2 Survivor Swapper Tool.exe` para iniciar (incluye entorno Python integrado y soporte completo para el actualizador integrado de GitHub).
 
-### Opción B — Terminal / PowerShell
+### Opción B — Desde Código Fuente (`.bat` en Windows o Terminal)
 
 ```powershell
 git clone https://github.com/SirCaveiraOFC/L4D2-Survivor-Swapper-Tool.git
@@ -59,7 +57,9 @@ pip install -r requirements.txt
 python app.py
 ```
 
-*(Para recompilar [`MdlDecompilerCli.exe`](../tools/mdl_decompiler_cli/MdlDecompilerCli.exe) desde el código fuente VB.NET de Crowbar, consulta [`build.ps1`](../tools/mdl_decompiler_cli/build.ps1) y [`NOTICE.txt`](../tools/mdl_decompiler_cli/NOTICE.txt).)*
+O haz doble clic en [`_INSTALL_REQUIREMENTS.bat`](../_INSTALL_REQUIREMENTS.bat) y luego en [`_RUN.bat`](../_RUN.bat) tras descargar o clonar el repositorio.
+
+*(Para recompilar [`MdlDecompilerCli.exe`](../tools/mdl_decompiler_cli/MdlDecompilerCli.exe) desde el código fuente VB.NET de Crowbar, consulta [`build.ps1`](../tools/mdl_decompiler_cli/build.ps1) y [`NOTICE.txt`](../tools/mdl_decompiler_cli/NOTICE.txt). Para empaquetar una edición Portátil con `L4D2 Survivor Swapper Tool.exe`, ejecuta [`tools/build_portable.ps1`](../tools/build_portable.ps1).)*
 
 ---
 
@@ -236,7 +236,10 @@ Opciones útiles: `--output-dir`, `--origin`, `--title`, `--author`, `--version`
 │   ├── workshop_description_dialog.py  # Visor enriquecido de descripción BBCode de Steam
 │   └── workshop_download_dialog.py     # Modal rápido de descarga por URL/ID de Workshop
 ├── docs/                               # Documentación localizada (PT-BR / ES-ES)
-├── tools/mdl_decompiler_cli/           # CLI headless Crowbar 0.74 en VB.NET + script de compilación
+├── tools/
+│   ├── launcher/                       # Launcher nativo .exe para Windows (C#) + script de compilación
+│   ├── mdl_decompiler_cli/           # CLI headless Crowbar 0.74 en VB.NET + script de compilación
+│   └── build_portable.ps1              # Empaquetador portátil con Python 3.13.5 integrado (.exe / .zip)
 ├── HUNK'S_SURVIVOR_SWAP_KIT/           # Plantillas base de QC/animaciones/rig por superviviente
 ├── legacy/                             # Scripts v1.x archivados y binario Crowbar.exe anterior
 └── tests/                              # Pruebas unitarias y de interfaz headless (pytest)
@@ -249,7 +252,7 @@ Opciones útiles: `--output-dir`, `--origin`, `--title`, `--author`, `--version`
 Antes de comprimir la carpeta para distribuirla, elimina archivos locales personales para que el nuevo usuario reciba una configuración inicial limpia:
 
 - Borra `settings.json`, `conversion_history.json` y `.update_manifest.json`.
-- Vacía o excluye `Survivor_Swap/`, `Swapped_Survivors/`, `Workshop_Downloads/`, `.pytest_cache/`, `__pycache__/` y opcionalmente `legacy/`.
+- Vacía o excluye `Survivor_Swap/`, `Swapped_Survivors/`, `Workshop_Downloads/`, `.pytest_cache/`, `__pycache__/`, `dist/` y opcionalmente `legacy/`. (Conserva `runtime/` si compartes una edición Portátil; omite `runtime/` en copias solo de código fuente.)
 
 ---
 
@@ -270,4 +273,4 @@ pytest
 - **H.U.N.K** — Plantillas base `.qc` de `HUNK'S_SURVIVOR_SWAP_KIT`
 - **Valve Corporation** — Source Engine SDK (`studiomdl.exe`, `vpk.exe`)
 
-Consulta [`LICENSE`](../LICENSE) para detalles completos de la licencia.
+Licenciado bajo **PolyForm Noncommercial 1.0.0** (libre para usar y modificar con fines no comerciales; se prohíbe su venta o uso comercial). Consulta [`LICENSE`](../LICENSE) y [`tools/mdl_decompiler_cli/NOTICE.txt`](../tools/mdl_decompiler_cli/NOTICE.txt) para detalles completos.

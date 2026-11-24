@@ -1155,7 +1155,6 @@ class BatchSwapPage(ScrollArea):
             i18n=self._i18n,
             fallback_stem=fallback_stem,
             sanitize_origin=sanitize,
-            max_targets=4,
         )
 
     def _refresh_item_template_preview(self, item: BatchQueueItem) -> None:
@@ -1174,7 +1173,6 @@ class BatchSwapPage(ScrollArea):
             i18n=self._i18n,
             fallback_stem=stem,
             sanitize_origin=sanitize,
-            max_targets=4,
         )
 
     def _resolve_item_cover_bytes(self, item: BatchQueueItem) -> Optional[bytes]:

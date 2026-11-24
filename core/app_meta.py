@@ -9,10 +9,10 @@ class AppMetadataInfo:
 
     name: str = "L4D2 Survivor Swapper Tool"
     major: int = 2
-    minor: int = 0
-    patch: int = 1
+    minor: int = 1
+    patch: int = 0
     developer: str = "Sr.Caveira"
-    license_name: str = "MIT"
+    license_name: str = "PolyForm Noncommercial 1.0.0"
     github_repo: str = "SirCaveiraOFC/L4D2-Survivor-Swapper-Tool"
     github_branch: str = "main"
     toolchain_summary: str = "Headless StudioMDL + MdlDecompilerCli (Crowbar 0.74 Core)"

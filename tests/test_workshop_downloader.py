@@ -301,12 +301,11 @@ def test_download_translations_and_settings_persist_workshop_dir(tmp_path: Path)
 def test_download_page_url_dialogs_and_main_window_integration(tmp_path: Path, monkeypatch) -> None:
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication, QWidget
-    from qfluentwidgets import Theme, setTheme
-
     from ui.batch_page import BatchSwapPage
     from ui.download_page import WorkshopDownloadPage
     from ui.main_window import MainWindow
     from ui.swap_page import SwapPage
+    from ui.theme import L4d2ThemeManager
     from ui.workshop_download_dialog import WorkshopUrlDialog
 
     app = QApplication.instance() or QApplication([])
@@ -492,9 +491,10 @@ def test_download_page_url_dialogs_and_main_window_integration(tmp_path: Path, m
             snap = win.grab()
             assert not snap.isNull()
     finally:
-        setTheme(Theme.DARK)
         win.close()
         win.deleteLater()
+        app.processEvents()
+        L4d2ThemeManager.apply_window_theme(None, "Dark")
         app.processEvents()
 
 
@@ -617,9 +617,10 @@ def test_animated_gif_and_non_survivor_script_mod_in_download_page(tmp_path: Pat
     from PySide6.QtCore import QBuffer, QEvent, QPointF, Qt
     from PySide6.QtGui import QMouseEvent, QPixmap
     from PySide6.QtWidgets import QApplication, QLabel
-    from qfluentwidgets import BodyLabel, InfoBar, StrongBodyLabel, Theme, setTheme
+    from qfluentwidgets import BodyLabel, InfoBar, StrongBodyLabel
 
     from ui.download_page import WorkshopDownloadPage
+    from ui.theme import L4d2ThemeManager
     from ui.widgets import ImageZoomDialog, clear_preview_media
     from ui.workshop_description_dialog import WorkshopDescriptionDialog
 
@@ -788,7 +789,8 @@ def test_animated_gif_and_non_survivor_script_mod_in_download_page(tmp_path: Pat
         page.shutdown_worker()
         page.close()
         page.deleteLater()
-        setTheme(Theme.DARK)
+        app.processEvents()
+        L4d2ThemeManager.apply_window_theme(None, "Dark")
         app.processEvents()
 
 
@@ -798,7 +800,7 @@ def test_localized_dates_lifetime_label_and_card_hover_coverage(tmp_path: Path) 
     from PySide6.QtCore import QBuffer, QEvent, QPointF, Qt
     from PySide6.QtGui import QMouseEvent, QPixmap
     from PySide6.QtWidgets import QApplication, QFrame, QLabel, QWidget
-    from qfluentwidgets import BodyLabel, CaptionLabel, CardWidget, HeaderCardWidget, Theme, setTheme
+    from qfluentwidgets import BodyLabel, CaptionLabel, CardWidget, HeaderCardWidget
 
     from core.history_manager import HistoryManager
     from core.models import ConversionHistoryEntry, ConversionHistoryOutput
@@ -828,7 +830,7 @@ def test_localized_dates_lifetime_label_and_card_hover_coverage(tmp_path: Path) 
     cfg_mgr = ConfigManager(project_root=tmp_path)
     cfg = AppConfig(workshop_download_dir="Workshop_Downloads", language="pt-BR")
     env = EnvironmentStatus(l4d2_installed=False)
-    setTheme(Theme.DARK)
+    L4d2ThemeManager.apply_window_theme(None, "Dark")
 
     hist_mgr = HistoryManager(project_root=tmp_path)
     hist_mgr.save(
@@ -1138,7 +1140,8 @@ def test_localized_dates_lifetime_label_and_card_hover_coverage(tmp_path: Path) 
         hero.deleteLater()
         drop_zone.close()
         drop_zone.deleteLater()
-        setTheme(Theme.DARK)
+        app.processEvents()
+        L4d2ThemeManager.apply_window_theme(None, "Dark")
         app.processEvents()
 
 
@@ -1147,9 +1150,9 @@ def test_window_resize_and_screen_repaint_guard(tmp_path: Path) -> None:
     from PySide6.QtCore import QEvent, QObject, QPoint, Qt
     from PySide6.QtTest import QTest
     from PySide6.QtWidgets import QApplication, QWidget
-    from qfluentwidgets import Theme, setTheme
 
     from ui.main_window import MainWindow
+    from ui.theme import L4d2ThemeManager
 
     app = QApplication.instance() or QApplication([])
     assert app is not None
@@ -1208,5 +1211,6 @@ def test_window_resize_and_screen_repaint_guard(tmp_path: Path) -> None:
     finally:
         win.close()
         win.deleteLater()
-        setTheme(Theme.DARK)
+        app.processEvents()
+        L4d2ThemeManager.apply_window_theme(None, "Dark")
         app.processEvents()

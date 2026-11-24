@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import os
+import sys
 from pathlib import Path
 from typing import Optional
 
 from PySide6.QtCore import QTimer
-from PySide6.QtGui import QCloseEvent, QGuiApplication, QShowEvent
+from PySide6.QtGui import QCloseEvent, QGuiApplication, QIcon, QShowEvent
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import (
     FluentIcon,
@@ -48,6 +50,9 @@ class MainWindow(FluentWindow):
         self._sync_detected_paths_into_config()
 
         self.i18n = LocalizationManager(self.config.language)
+        self._native_icon_handles: list[int] = []
+        self._app_icon_path = self.project_root / "ui" / "app_icon.ico"
+        self._apply_window_icon()
         L4d2ThemeManager.apply_window_theme(self, self.config.theme)
 
         self.resize(1120, 800)
@@ -354,10 +359,83 @@ class MainWindow(FluentWindow):
         self.refresh_environment()
         self.settings_page.load_from_state()
 
+    def _apply_window_icon(self) -> None:
+        if not self._app_icon_path.is_file():
+            return
+        icon = QIcon(str(self._app_icon_path))
+        if icon.isNull():
+            return
+        app = QApplication.instance()
+        if app is not None:
+            app.setWindowIcon(icon)
+        self.setWindowIcon(icon)
+        title_bar = getattr(self, "titleBar", None)
+        if title_bar is not None and hasattr(title_bar, "setIcon"):
+            title_bar.setIcon(icon)
+
+    def _apply_native_win32_icons(self) -> None:
+        if sys.platform != "win32" or not self._app_icon_path.is_file():
+            return
+        app = QGuiApplication.instance()
+        if app is None or app.platformName().strip().lower() not in ("windows", "direct2d"):
+            return
+        try:
+            import ctypes
+            from ctypes import wintypes
+
+            user32 = ctypes.windll.user32
+            user32.LoadImageW.argtypes = [
+                wintypes.HINSTANCE,
+                wintypes.LPCWSTR,
+                wintypes.UINT,
+                ctypes.c_int,
+                ctypes.c_int,
+                wintypes.UINT,
+            ]
+            user32.LoadImageW.restype = wintypes.HANDLE
+            user32.SendMessageW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]
+            user32.SendMessageW.restype = ctypes.c_ssize_t
+
+            hwnd = int(self.winId())
+            if not hwnd:
+                return
+            if not self._native_icon_handles:
+                path_str = str(self._app_icon_path)
+                small_h = user32.LoadImageW(None, path_str, 1, 16, 16, 0x0010)
+                big_h = user32.LoadImageW(None, path_str, 1, 256, 256, 0x0010)
+                if small_h:
+                    self._native_icon_handles.append(int(small_h))
+                if big_h:
+                    self._native_icon_handles.append(int(big_h))
+            if self._native_icon_handles:
+                user32.SendMessageW(hwnd, 0x0080, 0, self._native_icon_handles[0])
+                user32.SendMessageW(hwnd, 0x0080, 1, self._native_icon_handles[-1])
+        except Exception:
+            pass
+
+    def _release_native_win32_icons(self) -> None:
+        if sys.platform != "win32" or not self._native_icon_handles:
+            return
+        try:
+            import ctypes
+            from ctypes import wintypes
+
+            user32 = ctypes.windll.user32
+            user32.DestroyIcon.argtypes = [wintypes.HICON]
+            user32.DestroyIcon.restype = wintypes.BOOL
+            for hicon in self._native_icon_handles:
+                if hicon:
+                    user32.DestroyIcon(hicon)
+        except Exception:
+            pass
+        self._native_icon_handles.clear()
+
     def showEvent(self, event: QShowEvent) -> None:
         if hasattr(self, "setMicaEffectEnabled"):
             self.setMicaEffectEnabled(False)
         super().showEvent(event)
+        self._apply_window_icon()
+        self._apply_native_win32_icons()
         L4d2ThemeManager.refresh_window_tree(self, relayout=True)
 
     def closeEvent(self, event: QCloseEvent) -> None:
@@ -368,6 +446,7 @@ class MainWindow(FluentWindow):
         self.download_page.shutdown_worker()
         self.addons_page.shutdown_scan()
         self.updates_page.shutdown_worker()
+        self._release_native_win32_icons()
         super().closeEvent(event)
 
     def _sync_detected_paths_into_config(self) -> None:
@@ -390,8 +469,28 @@ class MainWindow(FluentWindow):
             self.config_mgr.save(self.config)
 
 
+def _set_windows_app_user_model_id() -> None:
+    if sys.platform != "win32":
+        return
+    if os.environ.get("QT_QPA_PLATFORM", "").strip().lower() == "offscreen":
+        return
+    try:
+        import ctypes
+
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
+            "SrCaveira.L4D2SurvivorSwapperTool.App"
+        )
+    except Exception:
+        pass
+
+
 def launch_gui(project_root: Optional[Path] = None) -> int:
+    _set_windows_app_user_model_id()
     app = QApplication.instance() or QApplication([])
-    window = MainWindow(project_root=project_root)
+    root = project_root or Path(__file__).resolve().parent.parent
+    app_icon = root / "ui" / "app_icon.ico"
+    if app_icon.is_file():
+        app.setWindowIcon(QIcon(str(app_icon)))
+    window = MainWindow(project_root=root)
     window.showMaximized()
     return app.exec()

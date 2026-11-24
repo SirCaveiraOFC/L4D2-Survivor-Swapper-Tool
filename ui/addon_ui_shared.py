@@ -960,7 +960,7 @@ def format_template_preview(
     i18n: LocalizationManager,
     fallback_stem: str = "my_mod",
     sanitize_origin: bool = True,
-    max_targets: int = 4,
+    max_targets: Optional[int] = None,
 ) -> str:
     """Render live sample or multi-target filenames and AddonTitles using SwapEngine rules."""
     o_spec = SurvivorRegistry.get(origin_id or SurvivorId.ZOEY)
@@ -989,7 +989,7 @@ def format_template_preview(
         return i18n.tr("meta_tags_preview", file=out_file, title=title_text)
 
     lines = [i18n.tr("meta_tags_preview_multi_hdr", count=len(dest_ids))]
-    shown = dest_ids[:max(1, max_targets)]
+    shown = dest_ids if max_targets is None else dest_ids[:max(1, max_targets)]
     for dest in shown:
         name, out_file, title_text = render_one(dest, True)
         lines.append(f"  • {name}: {out_file}.vpk  →  {title_text}")
@@ -1010,7 +1010,7 @@ def update_template_preview_label(
     i18n: LocalizationManager,
     fallback_stem: str = "my_mod",
     sanitize_origin: bool = True,
-    max_targets: int = 4,
+    max_targets: Optional[int] = None,
 ) -> None:
     """Update a preview QLabel text and overflow tooltip using rendered template targets."""
     text = format_template_preview(
@@ -1036,7 +1036,7 @@ def update_template_preview_label(
             sanitize_origin=sanitize_origin,
             max_targets=8,
         )
-        if len(dest_ids) > max_targets
+        if max_targets is not None and len(dest_ids) > max_targets
         else ""
     )
     label.setText(text)
@@ -1271,7 +1271,7 @@ class TemplatePreviewCard(QFrame):
         i18n: LocalizationManager,
         fallback_stem: str = "my_mod",
         sanitize_origin: bool = True,
-        max_targets: int = 4,
+        max_targets: Optional[int] = None,
     ) -> None:
         """Rebuild structured output filename and AddonTitle rows using SwapEngine rules."""
         self._i18n = i18n
@@ -1354,7 +1354,7 @@ class TemplatePreviewCard(QFrame):
             f"border-radius: 4px; color: {text_fg}; font-size: 10px; font-weight: 700; padding: 1px 7px; }}"
         )
 
-        shown = dest_ids[:max(1, max_targets)]
+        shown = dest_ids if max_targets is None else dest_ids[:max(1, max_targets)]
         for dest in shown:
             name, out_file, title_text = render_one(dest, True)
             row_w = QWidget(self.rows_host)
@@ -1448,7 +1448,7 @@ def update_template_preview_card(
     i18n: LocalizationManager,
     fallback_stem: str = "my_mod",
     sanitize_origin: bool = True,
-    max_targets: int = 4,
+    max_targets: Optional[int] = None,
 ) -> None:
     """Update both the visual TemplatePreviewCard and its compatibility plain-text label."""
     update_template_preview_label(

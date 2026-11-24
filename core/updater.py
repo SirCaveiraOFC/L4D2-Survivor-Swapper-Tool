@@ -36,6 +36,8 @@ USER_PROTECTED_DIRS = {
     "swapped_survivors",
     "survivor_swap",
     "workshop_downloads",
+    "runtime",
+    "dist",
     ".git",
     ".venv",
     "venv",
@@ -743,25 +745,35 @@ def apply_staged_update(
     )
 
 
-def schedule_app_relaunch(project_root: Path) -> None:
-    """Spawn a fresh detached instance of the application after updates."""
+def _resolve_relaunch_command(project_root: Path) -> list[str]:
     app_script = project_root / "app.py"
     if os.name == "nt":
+        launcher_exe = project_root / "L4D2 Survivor Swapper Tool.exe"
+        if launcher_exe.is_file() and (project_root / "runtime").is_dir():
+            return [str(launcher_exe)]
         exe = Path(sys.executable)
         pythonw = exe.with_name("pythonw.exe")
         runner = str(pythonw if pythonw.is_file() else exe)
+        return [runner, str(app_script)]
+    return [sys.executable, str(app_script)]
+
+
+def schedule_app_relaunch(project_root: Path) -> None:
+    """Spawn a fresh detached instance of the application after updates."""
+    cmd = _resolve_relaunch_command(project_root)
+    if os.name == "nt":
         flags = getattr(subprocess, "CREATE_NEW_PROCESS_GROUP", 0) | getattr(
             subprocess, "DETACHED_PROCESS", 0
         )
         subprocess.Popen(
-            [runner, str(app_script)],
+            cmd,
             cwd=str(project_root),
             creationflags=flags,
             close_fds=True,
         )
     else:
         subprocess.Popen(
-            [sys.executable, str(app_script)],
+            cmd,
             cwd=str(project_root),
             start_new_session=True,
             close_fds=True,
@@ -795,6 +807,7 @@ def _spawn_post_exit_helper(
     ops_path = staging_root / "deferred_ops.json"
     ops_path.write_text(json.dumps(deferred_ops), encoding="utf-8", newline="\n")
     helper_py = staging_root / "finish_update.py"
+    relaunch_cmd = _resolve_relaunch_command(project_root) if relaunch else []
     helper_code = "\n".join(
         [
             "import json, os, shutil, subprocess, sys, time",
@@ -824,8 +837,7 @@ def _spawn_post_exit_helper(
             "shutil.rmtree(staging, ignore_errors=True)",
             *(
                 [
-                    f"exe = Path({repr(str(Path(sys.executable).with_name('pythonw.exe') if Path(sys.executable).with_name('pythonw.exe').is_file() else Path(sys.executable)))})",
-                    "subprocess.Popen([str(exe), str(root / 'app.py')], cwd=str(root), close_fds=True)",
+                    f"subprocess.Popen({repr(relaunch_cmd)}, cwd=str(root), close_fds=True)",
                 ]
                 if relaunch
                 else []

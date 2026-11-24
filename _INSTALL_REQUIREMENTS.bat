@@ -3,13 +3,21 @@ setlocal
 cd /d "%~dp0"
 
 set "PY_CMD="
-where python >nul 2>&1
-if %errorlevel%==0 (
-    set "PY_CMD=python"
+if exist "%~dp0runtime\python.exe" (
+    set "PYTHONPATH="
+    set "PYTHONHOME="
+    set "PYTHONNOUSERSITE=1"
+    set "PYTHONUTF8=1"
+    set "PY_CMD=""%~dp0runtime\python.exe"""
 ) else (
-    where py >nul 2>&1
+    where python >nul 2>&1
     if %errorlevel%==0 (
-        set "PY_CMD=py -3"
+        set "PY_CMD=python"
+    ) else (
+        where py >nul 2>&1
+        if %errorlevel%==0 (
+            set "PY_CMD=py -3"
+        )
     )
 )
 
@@ -38,6 +46,6 @@ if not "%INSTALL_EXIT%"=="0" (
 )
 
 echo.
-echo [OK] All dependencies are installed. You can now run _RUN.bat.
+echo [OK] All dependencies are installed. You can now run _RUN.bat or L4D2 Survivor Swapper Tool.exe.
 if /i not "%~1"=="--no-pause" pause
 exit /b 0

@@ -631,7 +631,6 @@ class SwapPage(ScrollArea):
             i18n=self._i18n,
             fallback_stem=fallback_stem,
             sanitize_origin=self.switch_sanitize_origin.isChecked(),
-            max_targets=4,
         )
 
     def _on_start_conversion(self) -> None:

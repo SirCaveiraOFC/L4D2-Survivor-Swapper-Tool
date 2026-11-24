@@ -195,9 +195,25 @@ def test_updater_helpers_and_user_file_protection() -> None:
     assert is_protected_rel_path("Swapped_Survivors/my_skin.vpk")
     assert is_protected_rel_path("Workshop_Downloads/123.vpk")
     assert is_protected_rel_path(".git/config")
+    assert is_protected_rel_path("runtime/python.exe")
+    assert is_protected_rel_path("dist/portable.zip")
     assert is_protected_rel_path("custom_out/skin.vpk", extra_protected_roots=("custom_out",))
     assert not is_protected_rel_path("ui/updates_page.py")
     assert not is_protected_rel_path("core/new_feature/helper.py")
+
+
+def test_relaunch_command_prefers_portable_launcher(tmp_path: Path) -> None:
+    from core.updater import _resolve_relaunch_command
+
+    (tmp_path / "app.py").write_text("", encoding="utf-8")
+    fallback_cmd = _resolve_relaunch_command(tmp_path)
+    assert fallback_cmd[-1].endswith("app.py")
+
+    if os.name == "nt":
+        (tmp_path / "runtime").mkdir()
+        exe_path = tmp_path / "L4D2 Survivor Swapper Tool.exe"
+        exe_path.write_bytes(b"MZ")
+        assert _resolve_relaunch_command(tmp_path) == [str(exe_path)]
 
 
 def test_updater_check_stage_diff_and_apply_preserves_user_data(tmp_path: Path, monkeypatch) -> None:
